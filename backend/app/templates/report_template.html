@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgricarbonX Analysis Report - Job {{ job_id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #2c7d32;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            color: #2c7d32;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 18px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #2c7d32;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .map-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .stats-table th, .stats-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .stats-table th {
+            background-color: #f2f2f2;
+        }
+        .stats-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .sources-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .sources-table th, .sources-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .sources-table th {
+            background-color: #f2f2f2;
+        }
+        .sources-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AgricarbonX Analysis Report</h1>
+            <p>Soil Organic Carbon and Moisture Estimation</p>
+            <p>Job ID: {{ job_id }} | Generated on: {{ generation_date }}</p>
+        </div>
+
+        <div class="section">
+            <h2>Analysis Overview</h2>
+            <p>This report presents the results of soil organic carbon (SOC) and moisture estimation for <strong>{{ region_name }}</strong> during the period from <strong>{{ start_date }}</strong> to <strong>{{ end_date }}</strong>.</p>
+            <p>The analysis was performed using satellite imagery, soil property data, and machine learning models to estimate the spatial distribution of soil properties across the selected region.</p>
+        </div>
+
+        <div class="section">
+            <h2>Soil Organic Carbon Results</h2>
+            <div class="map-container">
+                <img src="soc_map.png" alt="Soil Organic Carbon Map" class="map-image">
+                <p>Figure 1: Spatial distribution of Soil Organic Carbon (g/kg)</p>
+            </div>
+            
+            <div class="map-container">
+                <img src="soc_histogram.png" alt="Soil Organic Carbon Histogram" class="map-image">
+                <p>Figure 2: Distribution of Soil Organic Carbon values</p>
+            </div>
+            
+            <h3>SOC Statistics</h3>
+            <table class="stats-table">
+                <tr>
+                    <th>Statistic</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Minimum (g/kg)</td>
+                    <td>{{ "%.2f"|format(soc_stats.min) }}</td>
+                </tr>
+                <tr>
+                    <td>Maximum (g/kg)</td>
+                    <td>{{ "%.2f"|format(soc_stats.max) }}</td>
+                </tr>
+                <tr>
+                    <td>Mean (g/kg)</td>
+                    <td>{{ "%.2f"|format(soc_stats.mean) }}</td>
+                </tr>
+                <tr>
+                    <td>Standard Deviation (g/kg)</td>
+                    <td>{{ "%.2f"|format(soc_stats.std) }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Soil Moisture Results</h2>
+            <div class="map-container">
+                <img src="moisture_map.png" alt="Soil Moisture Map" class="map-image">
+                <p>Figure 3: Spatial distribution of Soil Moisture (%)</p>
+            </div>
+            
+            <div class="map-container">
+                <img src="moisture_histogram.png" alt="Soil Moisture Histogram" class="map-image">
+                <p>Figure 4: Distribution of Soil Moisture values</p>
+            </div>
+            
+            <h3>Moisture Statistics</h3>
+            <table class="stats-table">
+                <tr>
+                    <th>Statistic</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Minimum (%)</td>
+                    <td>{{ "%.2f"|format(moisture_stats.min) }}</td>
+                </tr>
+                <tr>
+                    <td>Maximum (%)</td>
+                    <td>{{ "%.2f"|format(moisture_stats.max) }}</td>
+                </tr>
+                <tr>
+                    <td>Mean (%)</td>
+                    <td>{{ "%.2f"|format(moisture_stats.mean) }}</td>
+                </tr>
+                <tr>
+                    <td>Standard Deviation (%)</td>
+                    <td>{{ "%.2f"|format(moisture_stats.std) }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Methodology</h2>
+            <p>The soil property estimation was performed using the following methodology:</p>
+            <ol>
+                <li><strong>Data Collection:</strong> Satellite imagery (Sentinel-2, Landsat) and ancillary data (SoilGrids, climate data) were collected for the region of interest.</li>
+                <li><strong>Preprocessing:</strong> The imagery was preprocessed to remove clouds and compute spectral indices (NDVI, EVI, NDMI).</li>
+                <li><strong>Feature Extraction:</strong> A feature stack was created from the spectral bands and indices.</li>
+                <li><strong>ML Prediction:</strong> A machine learning model was applied to predict soil organic carbon and moisture.</li>
+            </ol>
+            
+            <h3>Model Information</h3>
+            <p><strong>Model Type:</strong> {{ model_info.type }}</p>
+            <p><strong>Description:</strong> {{ model_info.description }}</p>
+            <p><strong>Input Features:</strong> {{ model_info.features }}</p>
+            <p><strong>Training Data:</strong> {{ model_info.training_data }}</p>
+        </div>
+
+        <div class="section">
+            <h2>Data Sources</h2>
+            <table class="sources-table">
+                <tr>
+                    <th>Dataset</th>
+                    <th>Description</th>
+                    <th>Provider</th>
+                    <th>URL</th>
+                </tr>
+                {% for source in data_sources %}
+                <tr>
+                    <td>{{ source.name }}</td>
+                    <td>{{ source.description }}</td>
+                    <td>{{ source.provider }}</td>
+                    <td><a href="{{ source.url }}">{{ source.url }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>This report was generated by AgricarbonX, an open-source soil property estimation platform.</p>
+            <p>© 2025 AgricarbonX | <a href="https://github.com/yourusername/agricarbonx">GitHub Repository</a></p>
+        </div>
+    </div>
+</body>
+</html>
